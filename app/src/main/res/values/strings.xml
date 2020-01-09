@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">G8X BrowserHelper</string>
+    <string name="app_name" translatable="false">G8X BrowserHelper</string>
+    <string name="preference_sync_state_title">Enable when cover opened</string>
+    <string name="preference_sync_state_description">Tap to open accessibility settings</string>
+    <string name="preference_choose_browser_title">Choose Browser</string>
+    <string name="preference_browser_settings_title">Make as default</string>
+    <string name="preference_browser_settings_description">Open default apps settings.</string>
+    <string name="usage_title">Info</string>
+    <string name="usage_content">This app handles cover open or close event via accessibility service. If you enabled this, suppress opening new browser view when single screen. If you want to enable this feature, enable accessibility service in next screen.</string>
+    <string name="accessibility_description">Accessibility Service only used for handling cover screen enable or disable event.</string>
+    <string name="browser_not_selected">(not specified)</string>
 </resources>

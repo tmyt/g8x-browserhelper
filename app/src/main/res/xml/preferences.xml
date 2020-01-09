@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen
         xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory>
+        <Preference
+                app:key="choose_browser"
+                app:title="@string/preference_choose_browser_title"/>
+    </PreferenceCategory>
 
-    <SwitchPreferenceCompat
-            app:key="syncstate"
-            app:title="Sync cover status"/>
+    <PreferenceCategory>
+        <Preference
+                app:key="open_accessibility_settings"
+                app:title="@string/preference_sync_state_title"
+                app:summary="@string/preference_sync_state_description"/>
+
+        <Preference
+                app:key="browser_settings"
+                app:title="@string/preference_browser_settings_title"
+                app:summary="@string/preference_browser_settings_description"/>
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory>-->
+        <!--<Preference-->
+                <!--app:key="debug_enable"-->
+                <!--app:title="Debug - Enable Activity"/>-->
+        <!--<Preference-->
+                <!--app:key="debug_disable"-->
+                <!--app:title="Debug -Disable Activity"/>-->
+    <!--</PreferenceCategory>-->
 
 </androidx.preference.PreferenceScreen>

@@ -1,15 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools" package="net.refy.android.g8x.browserhelper">
 
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-
     <application android:allowBackup="false"
                  android:label="@string/app_name"
                  android:icon="@mipmap/ic_launcher"
                  android:roundIcon="@mipmap/ic_launcher_round"
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
-        <service android:name=".services.CoverEventService"/>
+        <service android:name=".services.CoverEventService" android:process=":service"
+                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service" />
+        </service>
         <activity android:name=".activities.UrlHandlerActivity" android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
                   android:theme="@android:style/Theme.NoDisplay">
@@ -17,8 +21,8 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http" android:host="*"/>
-                <data android:scheme="https" android:host="*"/>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name=".activities.SettingsActivity">
@@ -27,5 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <receiver android:name=".receivers.ChosenComponentReceiver" android:exported="false"/>
     </application>
 </manifest>

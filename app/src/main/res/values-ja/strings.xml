@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="preference_sync_state_title">カバーの開閉状態と同期する</string>
+    <string name="preference_sync_state_description">タップするとユーザー補助サービスの設定を開きます</string>
+    <string name="preference_choose_browser_title">使用するブラウザ</string>
+    <string name="preference_browser_settings_title">デフォルトブラウザに設定</string>
+    <string name="preference_browser_settings_description">設定アプリが開きます</string>
+    <string name="usage_title">同期機能について</string>
+    <string name="usage_content">このアプリはユーザー補助サービスを使ってカバーの開閉状態を取得しています。同期機能を有効にすると、片画面時にブラウザ画面が別画面で開かなくなります。有効にするには次の画面でこのアプリのユーザー補助サービスを有効にしてください。</string>
+    <string name="accessibility_description">カバースクリーンのON/OFF状態を取得するためにアクセシビリティサービスを使用します。</string>
+    <string name="browser_not_selected">(未選択)</string>
+</resources>
