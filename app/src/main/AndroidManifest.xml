@@ -7,12 +7,15 @@
                  android:roundIcon="@mipmap/ic_launcher_round"
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
+
+        <uses-library android:name="com.lge.sui" android:required="true"/>
+
         <service android:name=".services.CoverEventService" android:process=":service"
                  android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
+                <action android:name="android.accessibilityservice.AccessibilityService"/>
             </intent-filter>
-            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service" />
+            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service"/>
         </service>
         <activity android:name=".activities.UrlHandlerActivity" android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
@@ -21,8 +24,8 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http" />
-                <data android:scheme="https" />
+                <data android:scheme="http"/>
+                <data android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity android:name=".activities.SettingsActivity">
