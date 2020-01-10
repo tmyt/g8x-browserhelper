@@ -10,8 +10,8 @@ android {
         applicationId "net.refy.android.g8x.browserhelper"
         minSdkVersion 28
         targetSdkVersion 28
-        versionCode 3
-        versionName "1.0"
+        versionCode 4
+        versionName "1.0.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,7 +25,7 @@ android {
 dependencies {
     //implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly files('libs/android.hardware.display.jar')
-    implementation files('libs/reflect.jar')
+    implementation 'net.refy.android:reflect:1.0'
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0-alpha01'
     implementation 'androidx.preference:preference:1.1.0'
