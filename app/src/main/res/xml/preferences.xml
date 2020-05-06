@@ -9,23 +9,9 @@
 
     <PreferenceCategory>
         <Preference
-                app:key="open_accessibility_settings"
-                app:title="@string/preference_sync_state_title"
-                app:summary="@string/preference_sync_state_description"/>
-
-        <Preference
                 app:key="browser_settings"
                 app:title="@string/preference_browser_settings_title"
                 app:summary="@string/preference_browser_settings_description"/>
     </PreferenceCategory>
-
-    <!--<PreferenceCategory>-->
-        <!--<Preference-->
-                <!--app:key="debug_enable"-->
-                <!--app:title="Debug - Enable Activity"/>-->
-        <!--<Preference-->
-                <!--app:key="debug_disable"-->
-                <!--app:title="Debug -Disable Activity"/>-->
-    <!--</PreferenceCategory>-->
-
+    
 </androidx.preference.PreferenceScreen>

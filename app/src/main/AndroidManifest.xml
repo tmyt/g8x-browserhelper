@@ -9,14 +9,12 @@
                  android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
 
         <uses-library android:name="com.lge.sui" android:required="true"/>
-
-        <service android:name=".services.CoverEventService" android:process=":service"
-                 android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+        <activity android:name=".activities.SettingsActivity">
             <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService"/>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service"/>
-        </service>
+        </activity>
         <activity android:name=".activities.UrlHandlerActivity" android:excludeFromRecents="true"
                   android:launchMode="singleInstance"
                   android:theme="@android:style/Theme.NoDisplay">
@@ -28,12 +26,14 @@
                 <data android:scheme="https"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SettingsActivity">
+        <service
+                android:name=".services.CustomTabsConnectionService"
+                android:exported="true"
+                tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.support.customtabs.action.CustomTabsService"/>
             </intent-filter>
-        </activity>
+        </service>
         <receiver android:name=".receivers.ChosenComponentReceiver" android:exported="false"/>
     </application>
 </manifest>

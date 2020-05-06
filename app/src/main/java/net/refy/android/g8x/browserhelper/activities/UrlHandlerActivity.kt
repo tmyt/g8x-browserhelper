@@ -3,58 +3,53 @@ package net.refy.android.g8x.browserhelper.activities
 import android.app.Activity
 import android.app.ActivityOptions
 import android.app.PendingIntent
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.preference.PreferenceManager
-import android.view.WindowManager
 import net.refy.android.g8x.browserhelper.R
 import net.refy.android.g8x.browserhelper.receivers.ChosenComponentReceiver
-import net.refy.android.g8x.browserhelper.utils.DisplayHelperUtils
-import net.refy.android.g8x.browserhelper.utils.DisplayManagerExUtils
+import net.refy.android.g8x.browserhelper.utils.*
 
 class UrlHandlerActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        val currentDisplayId = wm.defaultDisplay.displayId
-        val coverDisplayId = DisplayHelperUtils(this).getCoverDisplayId()
-        val preferredDisplayId = when (currentDisplayId) {
-            coverDisplayId -> 0
-            else -> coverDisplayId
+        val uri = Uri.parse(intent.dataString)
+        val targetPackageName = lookupPackage(getPreferredPackageName())
+        // if not package selected, open chooser always
+        if (targetPackageName == null) {
+            openBrowserChooser(uri)
         }
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(intent.dataString))
-        val preference = PreferenceManager.getDefaultSharedPreferences(this)
-        val packageName = preference.getString("choose_browser", "")
-        if (!packageName.isNullOrEmpty()) {
-            intent.setPackage(packageName)
+        // if cover enabled, launch browser in other side
+        else if (DisplayManagerExUtils().isCoverEnabled()) {
+            openBrowser(targetPackageName, uri)
         }
-        var bundle: Bundle? = null
-        if (DisplayManagerExUtils().isCoverEnabled()) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            bundle = ActivityOptions.makeBasic().apply {
-                launchDisplayId = preferredDisplayId
-            }.toBundle()
+        // if cover disabled, launch browser or transfer custom tabs intent
+        else {
+            val activityClass = lookupActivityClass(targetPackageName)
+            if (activityClass == null) {
+                openBrowserChooser(uri)
+            } else {
+                transferCustomTabs(targetPackageName, activityClass)
+            }
         }
-        openBrowser(intent, bundle)
         finish()
     }
 
-    private fun openBrowser(intent: Intent, bundle: Bundle?) {
-        try {
-            startActivity(intent, bundle)
-        } catch (e: ActivityNotFoundException) {
-            if (intent.getPackage().isNullOrEmpty()) return
-            intent.setPackage(null)
-            openBrowserChooser(intent, bundle)
-        }
+    private fun transferCustomTabs(packageName: String, activityClass: String){
+        intent.setClassName(packageName, activityClass)
+        startActivity(intent)
     }
 
-    private fun openBrowserChooser(intent: Intent, bundle: Bundle?) {
+    private fun openBrowser(packageName: String, uri: Uri) {
+        val (intent, bundle) = makeBrowserIntent(uri)
+        intent.setPackage(packageName)
+        startActivity(intent, bundle)
+    }
+
+    private fun openBrowserChooser(uri: Uri) {
+        val (intent, bundle) = makeBrowserIntent(uri)
         val receiver = Intent(this, ChosenComponentReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, receiver, PendingIntent.FLAG_UPDATE_CURRENT)
         val chooser = Intent.createChooser(
@@ -74,5 +69,15 @@ class UrlHandlerActivity : Activity() {
             }
         }.toTypedArray())
         startActivity(chooser, bundle)
+    }
+
+    private fun makeBrowserIntent(uri: Uri): Pair<Intent, Bundle> {
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        val bundle = ActivityOptions.makeBasic()
+        if (DisplayManagerExUtils().isCoverEnabled()) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            bundle.launchDisplayId = lookupPreferredDisplayId()
+        }
+        return intent to bundle.toBundle()
     }
 }
