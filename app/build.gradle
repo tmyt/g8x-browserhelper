@@ -25,9 +25,8 @@ android {
 }
 
 dependencies {
-    //implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compileOnly files('libs/android.hardware.display.jar')
-    implementation 'net.refy.android:reflect:1.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'tech.onsen:reflect:1.1.0'
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
     implementation 'androidx.preference:preference:1.1.1'

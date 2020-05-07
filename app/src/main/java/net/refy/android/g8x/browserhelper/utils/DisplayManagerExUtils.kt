@@ -1,29 +1,32 @@
 package net.refy.android.g8x.browserhelper.utils
 
-import android.hardware.display.ICoverDisplayEnabledCallback
 import android.os.IBinder
-import net.refy.android.reflect.Reflect
+import tech.onsen.reflect.Reflect
 
 class DisplayManagerExUtils : Reflect() {
-    class ServiceManager : Reflect() {
-        override val type = Class.forName("android.os.ServiceManager")
+    companion object{
+        const val STATE_DISABLED = 2
+        const val STATE_ENABLED = 3
+        const val STATE_UNMOUNT = 1
+    }
+
+    private class ServiceManager : Reflect("android.os.ServiceManager") {
+        override val value = null
         val getService by static<Any>(String::class.java)
     }
 
-    class IDisplayManager_Stub : Reflect() {
-        override val type = Class.forName("android.hardware.display.IDisplayManagerEx\$Stub")
+    private class IDisplayManager_Stub : Reflect("android.hardware.display.IDisplayManagerEx\$Stub") {
+        override val value = null
         val asInterface by static<Any>(IBinder::class.java)
     }
 
     private val serviceManager = ServiceManager()
     private val displayManagerStub = IDisplayManager_Stub()
 
-    override val value = displayManagerStub.asInterface(serviceManager.getService("display"))
-    override val type: Class<*> = value.javaClass
+    override val type: Class<*> by lazy { value.javaClass }
+    override val value by lazy { displayManagerStub.asInterface(serviceManager.getService("display")) }
 
     val getCoverDisplayState by virtual<Int>()
-    val registerCoverDisplayEnabledCallback by virtual<Unit>(String::class.java, ICoverDisplayEnabledCallback::class.java)
-    val unregisterCoverDisplayEnabledCallback by virtual<Unit>(String::class.java)
 
-    fun isCoverEnabled() = getCoverDisplayState() == ICoverDisplayEnabledCallback.STATE_ENABLED
+    fun isCoverEnabled() = getCoverDisplayState() == STATE_ENABLED
 }
