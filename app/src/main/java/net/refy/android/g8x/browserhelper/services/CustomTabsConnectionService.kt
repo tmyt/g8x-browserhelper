@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.*
 import android.support.customtabs.ICustomTabsCallback
 import android.support.customtabs.ICustomTabsService
+import android.util.Log
 import androidx.browser.customtabs.CustomTabsCallback
 import androidx.browser.customtabs.CustomTabsService
 import androidx.browser.customtabs.CustomTabsSessionToken
@@ -17,23 +18,29 @@ import net.refy.android.g8x.browserhelper.utils.lookupPackage
 import net.refy.android.g8x.browserhelper.utils.lookupServiceClass
 
 class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
+    companion object {
+        const val TAG = "G8X.BrowserHelper"
+    }
+
     private var binder: ICustomTabsService? = null
 
     override fun onCreate() {
         super.onCreate()
+        Log.i(TAG, "Service.onCreate")
         // bind to target browser
         val targetPackageName = lookupPackage(getPreferredPackageName())
         if (targetPackageName != null) {
             val serviceClass = lookupServiceClass(targetPackageName)
-            if(serviceClass != null){
+            if (serviceClass != null) {
                 bindTargetService(targetPackageName, serviceClass)
             }
         }
     }
 
-    override fun onUnbind(intent: Intent?): Boolean {
-        this.stopSelf()
-        return true
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.i(TAG, "Service.onDestroy")
+        unbindService(this)
     }
 
     override fun warmup(flags: Long): Boolean {
@@ -87,18 +94,22 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
     }
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
+        Log.i(TAG, "Service.onServiceConnected($name)")
         this.binder = ICustomTabsService.Stub.asInterface(binder)
     }
 
     override fun onServiceDisconnected(name: ComponentName?) {
+        Log.i(TAG, "Service.onServiceDisconnected($name)")
         this.stopSelf()
     }
 
-    private fun bindTargetService(packageName: String, serviceClass: String){
+    private fun bindTargetService(packageName: String, serviceClass: String) {
+        Log.i(TAG, "bindTo: $packageName/$serviceClass")
         val serviceIntent = Intent(CustomIntent.ACTION_CUSTOM_TABS_CONNECTION)
         serviceIntent.setClassName(packageName, serviceClass)
         bindService(serviceIntent, this, Service.BIND_AUTO_CREATE)
     }
+
     //
     class CustomTabsCallbackWrap(private val callback: CustomTabsCallback) : ICustomTabsCallback.Stub() {
         override fun onRelationshipValidationResult(
