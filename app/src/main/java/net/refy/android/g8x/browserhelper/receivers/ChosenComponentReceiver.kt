@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 class ChosenComponentReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

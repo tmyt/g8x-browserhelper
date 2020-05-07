@@ -8,7 +8,7 @@ import androidx.preference.PreferenceManager
 
 class CustomIntent {
     companion object {
-        const val ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService";
+        const val ACTION_CUSTOM_TABS_CONNECTION = "android.support.customtabs.action.CustomTabsService"
     }
 }
 
