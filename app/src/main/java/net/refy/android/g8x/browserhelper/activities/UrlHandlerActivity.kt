@@ -37,7 +37,7 @@ class UrlHandlerActivity : Activity() {
         finish()
     }
 
-    private fun transferCustomTabs(packageName: String, activityClass: String){
+    private fun transferCustomTabs(packageName: String, activityClass: String) {
         intent.setClassName(packageName, activityClass)
         startActivity(intent)
     }

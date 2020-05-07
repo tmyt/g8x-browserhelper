@@ -12,10 +12,7 @@ import android.util.Log
 import androidx.browser.customtabs.CustomTabsCallback
 import androidx.browser.customtabs.CustomTabsService
 import androidx.browser.customtabs.CustomTabsSessionToken
-import net.refy.android.g8x.browserhelper.utils.CustomIntent
-import net.refy.android.g8x.browserhelper.utils.getPreferredPackageName
-import net.refy.android.g8x.browserhelper.utils.lookupPackage
-import net.refy.android.g8x.browserhelper.utils.lookupServiceClass
+import net.refy.android.g8x.browserhelper.utils.*
 
 class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
     companion object {
@@ -43,55 +40,39 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
         unbindService(this)
     }
 
-    override fun warmup(flags: Long): Boolean {
-        try {
-            return binder?.warmup(flags) ?: false
-        } catch (e: RemoteException) {
-            return false
-        }
-    }
+    override fun warmup(flags: Long): Boolean = call { binder?.warmup(flags) }
 
-    override fun requestPostMessageChannel(sessionToken: CustomTabsSessionToken, postMessageOrigin: Uri): Boolean {
-        return binder?.requestPostMessageChannel(sessionToken.wrap(), postMessageOrigin) ?: false
-    }
+    override fun requestPostMessageChannel(sessionToken: CustomTabsSessionToken, postMessageOrigin: Uri): Boolean =
+        call { binder?.requestPostMessageChannel(sessionToken.wrap(), postMessageOrigin) }
 
-    override fun newSession(sessionToken: CustomTabsSessionToken): Boolean {
-        return binder?.newSession(sessionToken.wrap()) ?: false
-    }
+    override fun newSession(sessionToken: CustomTabsSessionToken): Boolean =
+        call { binder?.newSession(sessionToken.wrap()) }
 
-    override fun extraCommand(commandName: String, args: Bundle?): Bundle? {
-        return binder?.extraCommand(commandName, args)
-    }
+    override fun extraCommand(commandName: String, args: Bundle?): Bundle? =
+        call { binder?.extraCommand(commandName, args) }
 
-    override fun receiveFile(sessionToken: CustomTabsSessionToken, uri: Uri, purpose: Int, extras: Bundle?): Boolean {
-        return binder?.receiveFile(sessionToken.wrap(), uri, purpose, extras) ?: false
-    }
+    override fun receiveFile(sessionToken: CustomTabsSessionToken, uri: Uri, purpose: Int, extras: Bundle?): Boolean =
+        call { binder?.receiveFile(sessionToken.wrap(), uri, purpose, extras) }
 
     override fun mayLaunchUrl(
         sessionToken: CustomTabsSessionToken,
         url: Uri,
         extras: Bundle?,
         otherLikelyBundles: MutableList<Bundle>?
-    ): Boolean {
-        return binder?.mayLaunchUrl(sessionToken.wrap(), url, extras, otherLikelyBundles) ?: false
-    }
+    ): Boolean = call { binder?.mayLaunchUrl(sessionToken.wrap(), url, extras, otherLikelyBundles) }
 
-    override fun postMessage(sessionToken: CustomTabsSessionToken, message: String, extras: Bundle?): Int {
-        return binder?.postMessage(sessionToken.wrap(), message, extras) ?: 0
-    }
+    override fun postMessage(sessionToken: CustomTabsSessionToken, message: String, extras: Bundle?): Int =
+        call { binder?.postMessage(sessionToken.wrap(), message, extras) }
 
     override fun validateRelationship(
         sessionToken: CustomTabsSessionToken,
         relation: Int,
         origin: Uri,
         extras: Bundle?
-    ): Boolean {
-        return binder?.validateRelationship(sessionToken.wrap(), relation, origin, extras) ?: false
-    }
+    ): Boolean = call { binder?.validateRelationship(sessionToken.wrap(), relation, origin, extras) }
 
-    override fun updateVisuals(sessionToken: CustomTabsSessionToken, bundle: Bundle?): Boolean {
-        return binder?.updateVisuals(sessionToken.wrap(), bundle) ?: false
-    }
+    override fun updateVisuals(sessionToken: CustomTabsSessionToken, bundle: Bundle?): Boolean =
+        call { binder?.updateVisuals(sessionToken.wrap(), bundle) ?: false }
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
         Log.i(TAG, "Service.onServiceConnected($name)")
