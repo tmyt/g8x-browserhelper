@@ -8,8 +8,8 @@ android {
         applicationId "net.refy.android.g8x.browserhelper"
         minSdkVersion 28
         targetSdkVersion 29
-        versionCode 5
-        versionName "2.0.0"
+        versionCode 6
+        versionName "2.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
