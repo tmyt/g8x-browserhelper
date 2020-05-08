@@ -25,13 +25,9 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
         super.onCreate()
         Log.i(TAG, "Service.onCreate")
         // bind to target browser
-        val targetPackageName = lookupPackage(getPreferredPackageName())
-        if (targetPackageName != null) {
-            val serviceClass = lookupServiceClass(targetPackageName)
-            if (serviceClass != null) {
-                bindTargetService(targetPackageName, serviceClass)
-            }
-        }
+        val targetPackageName = guard(lookupPackage(getPreferredPackageName())) { return }
+        val serviceClass = guard(lookupServiceClass(targetPackageName)) { return }
+        bindTargetService(targetPackageName, serviceClass)
     }
 
     override fun onDestroy() {
@@ -40,39 +36,44 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
         unbindService(this)
     }
 
-    override fun warmup(flags: Long): Boolean = call { binder?.warmup(flags) }
+    override fun warmup(flags: Long) = call(false) { binder?.warmup(flags) }
 
-    override fun requestPostMessageChannel(sessionToken: CustomTabsSessionToken, postMessageOrigin: Uri): Boolean =
-        call { binder?.requestPostMessageChannel(sessionToken.wrap(), postMessageOrigin) }
+    override fun requestPostMessageChannel(sessionToken: CustomTabsSessionToken, postMessageOrigin: Uri) =
+        call(false) { binder?.requestPostMessageChannel(sessionToken.wrap(), postMessageOrigin) }
 
-    override fun newSession(sessionToken: CustomTabsSessionToken): Boolean =
-        call { binder?.newSession(sessionToken.wrap()) }
+    override fun newSession(sessionToken: CustomTabsSessionToken) =
+        call(false) { binder?.newSession(sessionToken.wrap()) }
 
-    override fun extraCommand(commandName: String, args: Bundle?): Bundle? =
-        call { binder?.extraCommand(commandName, args) }
+    override fun extraCommand(commandName: String, args: Bundle?) =
+        call(null) { binder?.extraCommand(commandName, args) }
 
-    override fun receiveFile(sessionToken: CustomTabsSessionToken, uri: Uri, purpose: Int, extras: Bundle?): Boolean =
-        call { binder?.receiveFile(sessionToken.wrap(), uri, purpose, extras) }
+    override fun receiveFile(
+        sessionToken: CustomTabsSessionToken,
+        uri: Uri,
+        purpose: Int,
+        extras: Bundle?
+    ) =
+        call(false) { binder?.receiveFile(sessionToken.wrap(), uri, purpose, extras) }
 
     override fun mayLaunchUrl(
         sessionToken: CustomTabsSessionToken,
         url: Uri,
         extras: Bundle?,
         otherLikelyBundles: MutableList<Bundle>?
-    ): Boolean = call { binder?.mayLaunchUrl(sessionToken.wrap(), url, extras, otherLikelyBundles) }
+    ) = call(false) { binder?.mayLaunchUrl(sessionToken.wrap(), url, extras, otherLikelyBundles) }
 
-    override fun postMessage(sessionToken: CustomTabsSessionToken, message: String, extras: Bundle?): Int =
-        call { binder?.postMessage(sessionToken.wrap(), message, extras) }
+    override fun postMessage(sessionToken: CustomTabsSessionToken, message: String, extras: Bundle?) =
+        call(0) { binder?.postMessage(sessionToken.wrap(), message, extras) }
 
     override fun validateRelationship(
         sessionToken: CustomTabsSessionToken,
         relation: Int,
         origin: Uri,
         extras: Bundle?
-    ): Boolean = call { binder?.validateRelationship(sessionToken.wrap(), relation, origin, extras) }
+    ) = call(false) { binder?.validateRelationship(sessionToken.wrap(), relation, origin, extras) }
 
-    override fun updateVisuals(sessionToken: CustomTabsSessionToken, bundle: Bundle?): Boolean =
-        call { binder?.updateVisuals(sessionToken.wrap(), bundle) ?: false }
+    override fun updateVisuals(sessionToken: CustomTabsSessionToken, bundle: Bundle?) =
+        call(false) { binder?.updateVisuals(sessionToken.wrap(), bundle) }
 
     override fun onServiceConnected(name: ComponentName?, binder: IBinder?) {
         Log.i(TAG, "Service.onServiceConnected($name)")
