@@ -11,12 +11,10 @@ class DisplayManagerExUtils : Reflect() {
     }
 
     private class ServiceManager : Reflect("android.os.ServiceManager") {
-        override val value = null
         val getService by static<Any>(String::class.java)
     }
 
     private class IDisplayManager_Stub : Reflect("android.hardware.display.IDisplayManagerEx\$Stub") {
-        override val value = null
         val asInterface by static<Any>(IBinder::class.java)
     }
 
