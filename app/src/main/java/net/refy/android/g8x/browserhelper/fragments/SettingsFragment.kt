@@ -16,7 +16,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private lateinit var sharedPreference: SharedPreferences
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        sharedPreference = PreferenceManager.getDefaultSharedPreferences(activity)
+        sharedPreference = PreferenceManager.getDefaultSharedPreferences(requireActivity())
         setPreferencesFromResource(R.xml.preferences, rootKey)
 
         findPreference<Preference>("choose_browser")?.setOnPreferenceClickListener {

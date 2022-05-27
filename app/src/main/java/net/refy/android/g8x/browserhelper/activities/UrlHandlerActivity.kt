@@ -51,7 +51,12 @@ class UrlHandlerActivity : Activity() {
     private fun openBrowserChooser(uri: Uri) {
         val (intent, bundle) = makeBrowserIntent(uri)
         val receiver = Intent(this, ChosenComponentReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, receiver, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            0,
+            receiver,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val chooser = Intent.createChooser(
             intent,
             getString(R.string.preference_choose_browser_title),
@@ -73,6 +78,7 @@ class UrlHandlerActivity : Activity() {
 
     private fun makeBrowserIntent(uri: Uri): Pair<Intent, Bundle> {
         val intent = Intent(Intent.ACTION_VIEW, uri)
+        intent.addCategory(Intent.CATEGORY_DEFAULT)
         val bundle = ActivityOptions.makeBasic()
         if (DisplayManagerExUtils().isCoverEnabled()) {
             intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)

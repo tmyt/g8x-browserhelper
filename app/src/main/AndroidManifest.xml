@@ -1,39 +1,70 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="net.refy.android.g8x.browserhelper">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="net.refy.android.g8x.browserhelper">
 
-    <application android:allowBackup="false"
-                 android:label="@string/app_name"
-                 android:icon="@mipmap/ic_launcher"
-                 android:roundIcon="@mipmap/ic_launcher_round"
-                 android:supportsRtl="true"
-                 android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
+    <application
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme"
+            tools:ignore="GoogleAppIndexingWarning">
 
-        <uses-library android:name="com.lge.sui" android:required="true"/>
-        <activity android:name=".activities.SettingsActivity">
+        <uses-library
+                android:name="com.lge.sui"
+                android:required="true" />
+
+        <activity
+                android:name=".activities.SettingsActivity"
+                android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.UrlHandlerActivity" android:excludeFromRecents="true"
-                  android:launchMode="singleInstance"
-                  android:theme="@android:style/Theme.NoDisplay">
+        <activity
+                android:name=".activities.UrlHandlerActivity"
+                android:excludeFromRecents="true"
+                android:exported="true"
+                android:launchMode="singleInstance"
+                android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="http"/>
-                <data android:scheme="https"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
             </intent-filter>
         </activity>
+
         <service
                 android:name=".services.CustomTabsConnectionService"
                 android:exported="true"
                 tools:ignore="ExportedService">
             <intent-filter>
-                <action android:name="android.support.customtabs.action.CustomTabsService"/>
+                <action android:name="android.support.customtabs.action.CustomTabsService" />
             </intent-filter>
         </service>
-        <receiver android:name=".receivers.ChosenComponentReceiver" android:exported="false"/>
+        <receiver
+                android:name=".receivers.ChosenComponentReceiver"
+                android:exported="false" />
     </application>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+    </queries>
 </manifest>

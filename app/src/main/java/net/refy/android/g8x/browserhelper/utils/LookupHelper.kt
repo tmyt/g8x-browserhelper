@@ -13,7 +13,9 @@ class CustomIntent {
 }
 
 fun makeUrlIntent(): Intent{
-    return Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com/"))
+    return Intent(Intent.ACTION_VIEW, Uri.parse("http://www.example.com/")).also{
+        it.addCategory(Intent.CATEGORY_DEFAULT)
+    }
 }
 
 fun Context.getPreferredPackageName(): String? {

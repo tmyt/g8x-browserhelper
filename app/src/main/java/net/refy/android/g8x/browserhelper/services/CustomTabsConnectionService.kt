@@ -38,7 +38,10 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
 
     override fun warmup(flags: Long) = call(false) { binder?.warmup(flags) }
 
-    override fun requestPostMessageChannel(sessionToken: CustomTabsSessionToken, postMessageOrigin: Uri) =
+    override fun requestPostMessageChannel(
+        sessionToken: CustomTabsSessionToken,
+        postMessageOrigin: Uri
+    ) =
         call(false) { binder?.requestPostMessageChannel(sessionToken.wrap(), postMessageOrigin) }
 
     override fun newSession(sessionToken: CustomTabsSessionToken) =
@@ -57,12 +60,16 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
 
     override fun mayLaunchUrl(
         sessionToken: CustomTabsSessionToken,
-        url: Uri,
+        url: Uri?,
         extras: Bundle?,
         otherLikelyBundles: MutableList<Bundle>?
     ) = call(false) { binder?.mayLaunchUrl(sessionToken.wrap(), url, extras, otherLikelyBundles) }
 
-    override fun postMessage(sessionToken: CustomTabsSessionToken, message: String, extras: Bundle?) =
+    override fun postMessage(
+        sessionToken: CustomTabsSessionToken,
+        message: String,
+        extras: Bundle?
+    ) =
         call(0) { binder?.postMessage(sessionToken.wrap(), message, extras) }
 
     override fun validateRelationship(
@@ -93,7 +100,8 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
     }
 
     //
-    class CustomTabsCallbackWrap(private val callback: CustomTabsCallback) : ICustomTabsCallback.Stub() {
+    class CustomTabsCallbackWrap(private val callback: CustomTabsCallback) :
+        ICustomTabsCallback.Stub() {
         override fun onRelationshipValidationResult(
             relation: Int,
             requestedOrigin: Uri,
@@ -125,9 +133,10 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
     }
 
     // wrap utility
-    private fun CustomTabsSessionToken.wrap() = sessionCache[this] ?: CustomTabsCallbackWrap(this.callback!!).also {
-        sessionCache[this] = it
-    }
+    private fun CustomTabsSessionToken.wrap() =
+        sessionCache[this] ?: CustomTabsCallbackWrap(this.callback!!).also {
+            sessionCache[this] = it
+        }
 
     private val sessionCache: HashMap<CustomTabsSessionToken, CustomTabsCallbackWrap> = HashMap()
 }
