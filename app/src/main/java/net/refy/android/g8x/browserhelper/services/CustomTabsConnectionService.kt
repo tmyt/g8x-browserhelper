@@ -127,6 +127,10 @@ class CustomTabsConnectionService : CustomTabsService(), ServiceConnection {
             return callback.extraCallbackWithResult(callbackName, args)!!
         }
 
+        override fun onActivityResized(p0: Int, p1: Int, p2: Bundle?) {
+            return callback.onActivityResized(p0, p1, p2!!)
+        }
+
         override fun onMessageChannelReady(extras: Bundle?) {
             callback.onMessageChannelReady(extras)
         }

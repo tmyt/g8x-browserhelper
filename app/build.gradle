@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 34
     defaultConfig {
         applicationId "net.refy.android.g8x.browserhelper"
         minSdkVersion 28
-        targetSdkVersion 32
-        versionCode 7
-        versionName "2.0.2"
+        targetSdkVersion 34
+        versionCode 9
+        versionName "2.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,14 +27,15 @@ android {
     viewBinding {
         enabled = true
     }
+    namespace 'net.refy.android.g8x.browserhelper'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'tech.onsen:reflect:1.1.2'
-    implementation 'androidx.appcompat:appcompat:1.6.0-alpha04'
-    implementation 'androidx.preference:preference-ktx:1.2.0'
-    implementation 'androidx.browser:browser:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+    implementation 'androidx.browser:browser:1.6.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test:runner:1.5.0-alpha03'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0-alpha06'
